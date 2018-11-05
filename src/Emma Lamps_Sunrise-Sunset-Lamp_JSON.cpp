@@ -22,7 +22,9 @@
 #define PASSWORD_NAME "WIFI_PASSWORD"     //Default SSID if not build flag from PlatformIO doesn't work
 #endif
 
-const IPAddress timeServer(203, 118, 151, 32);                                                    // Your local NTP server
+const char *NTPServerName = "0.nz.pool.ntp.org";    //Your local NTP server
+IPAddress timeServer;
+
 const int nzutc = 12;                                                                             //Country UTC offset, needed for UTC for day/night calc  (+12)  don't need to change for daylight saving as no needed for day/night
 const char *sunrise_api_request = "http://api.sunrise-sunset.org/json?lat=-41.2865&lng=174.7762"; //API with your Long / Lat
 
@@ -430,6 +432,7 @@ void DecodeEpoch(unsigned long currentTime)
 void Request_Time()
 {
   Serial.println("Getting Time");
+  WiFi.hostByName(NTPServerName, timeServer);
   sendNTPpacket(timeServer); // send an NTP packet to a time server
 }
 
